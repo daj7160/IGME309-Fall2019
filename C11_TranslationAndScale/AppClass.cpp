@@ -3,14 +3,17 @@ void Application::InitVariables(void)
 {
 	//init the mesh
 	
-	int meshCount = 46;
-	for (int i = 0; i < meshCount; i++)
-	{
+	//46 meshes to create the shape of the invader
+	//meshCount = 46;
+	//for (int i = 0; i < meshCount; i++)
+	//{
+		//Put all meshes in a vector for later
 		m_pMesh = new MyMesh();
 		meshList.push_back(m_pMesh);
 		m_pMesh->GenerateCube(1.0f, C_WHITE);
-	}
+	//}
 	//m_pMesh->GenerateSphere(1.0f, 5, C_WHITE);
+
 }
 void Application::Update(void)
 {
@@ -39,10 +42,12 @@ void Application::Display(void)
 	value2 += 0.001f;
 	
 
-	//matrix4 m4Model = m4Translate * m4Scale;
-	matrix4 m4Model = m4Scale * m4Translate;
-
-	m_pMesh->Render(m4Projection, m4View, m4Model);
+	//for (int i = 0; i < 46; i++)
+	//{
+	//	glm::vec3 origin = glm::vec3(0.0f, 0.0f, 0.0f)
+		matrix4 m4Model = m4Scale * m4Translate;
+		m_pMesh->Render(m4Projection, m4View, m4Model);
+	//}
 	
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();
