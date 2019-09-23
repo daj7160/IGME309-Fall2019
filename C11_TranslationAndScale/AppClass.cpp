@@ -2,9 +2,15 @@
 void Application::InitVariables(void)
 {
 	//init the mesh
-	m_pMesh = new MyMesh();
-	//m_pMesh->GenerateCube(1.0f, C_WHITE);
-	m_pMesh->GenerateSphere(1.0f, 5, C_WHITE);
+	
+	int meshCount = 46;
+	for (int i = 0; i < meshCount; i++)
+	{
+		m_pMesh = new MyMesh();
+		meshList.push_back(m_pMesh);
+		m_pMesh->GenerateCube(1.0f, C_WHITE);
+	}
+	//m_pMesh->GenerateSphere(1.0f, 5, C_WHITE);
 }
 void Application::Update(void)
 {
@@ -27,8 +33,11 @@ void Application::Display(void)
 	
 	matrix4 m4Scale = glm::scale(IDENTITY_M4, vector3(2.0f,2.0f,2.0f));
 	static float value = 0.0f;
-	matrix4 m4Translate = glm::translate(IDENTITY_M4, vector3(value, 2.0f, 3.0f));
+	static float value2 = 0.0f;
+	matrix4 m4Translate = glm::translate(IDENTITY_M4, vector3(value, value2, -1.0f));
 	value += 0.01f;
+	value2 += 0.001f;
+	
 
 	//matrix4 m4Model = m4Translate * m4Scale;
 	matrix4 m4Model = m4Scale * m4Translate;
