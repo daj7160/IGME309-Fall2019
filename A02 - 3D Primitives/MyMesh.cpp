@@ -272,12 +272,39 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	if (a_nSubdivisions > 360)
 		a_nSubdivisions = 360;
 
+	int i;
+	int x = 0;
+	int y = 0;
+	std::vector<vector3> points;
+
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
-	// -------------------------------
+	for (i = 0; i < a_nSubdivisions; i++)
+	{
+
+		double currentX = x + (a_fRadius * cos(i * (2.0f * PI) / a_nSubdivisions));
+		double currentY = y + (a_fRadius * sin(i * (2.0f * PI) / a_nSubdivisions));
+
+		points.push_back(vector3(currentX, currentY, 0));
+
+
+
+	}
+
+	for (i = 0; i < a_nSubdivisions; i++)
+	{
+		if (i < a_nSubdivisions - 1)
+		{
+			AddTri(points[i],-points[i + 1], vector3(0, 0, 0));
+			AddTri(points[i], points[i + 1], vector3(0, 0, 1));
+		}
+		else
+		{
+			AddTri(points[i], points[0], vector3(0, 0, 0));
+			AddTri(points[i], points[0], vector3(0, 0, 1));
+		}
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -295,15 +322,37 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 		a_nSubdivisions = 3;
 	if (a_nSubdivisions > 360)
 		a_nSubdivisions = 360;
+	int i;
+	int x = 0;
+	int y = 0;
+	std::vector<vector3> points;
 
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
-	// -------------------------------
+	for (i = 0; i < a_nSubdivisions; i++)
+	{
 
-	// Adding information about color
+		double currentX = x + (a_fRadius * cos(i * (2.0f * PI) / a_nSubdivisions));
+		double currentY = y + (a_fRadius * sin(i * (2.0f * PI) / a_nSubdivisions));
+
+		points.push_back(vector3(currentX, currentY, 0));
+
+
+
+	}
+
+	for (i = 0; i < a_nSubdivisions; i++)
+	{
+		if (i < a_nSubdivisions - 1)
+		{
+			AddTri(points[i], points[i + 1], vector3(0, 0, 1));
+		}
+		else
+		{
+			AddTri(points[i], points[0], vector3(0, 0, 1));
+		}
+	}
 	CompleteMesh(a_v3Color);
 	CompileOpenGL3X();
 }
