@@ -296,13 +296,14 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	{
 		if (i < a_nSubdivisions - 1)
 		{
-			AddTri(points[i],-points[i + 1], vector3(0, 0, 0));
-			AddTri(points[i], points[i + 1], vector3(0, 0, 1));
+			AddTri(points[i], points[i + 1], vector3(0, 0, a_fHeight));
+			AddTri(vector3(0, 0, 0), points[i + 1], points[i]);
 		}
 		else
 		{
-			AddTri(points[i], points[0], vector3(0, 0, 0));
-			AddTri(points[i], points[0], vector3(0, 0, 1));
+			
+			AddTri(points[i], points[0], vector3(0, 0, a_fHeight));
+			AddTri(vector3(0, 0, 0), points[0], points[i]);
 		}
 	}
 
@@ -346,11 +347,15 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	{
 		if (i < a_nSubdivisions - 1)
 		{
-			AddTri(points[i], points[i + 1], vector3(0, 0, 1));
+			AddTri(vector3(0, 0, 0), points[i + 1], points[i]);
+			AddTri(vector3(points[i + 1].x, points[i+1].y, a_fHeight), vector3(0, 0, a_fHeight), vector3(points[i].x, points[i].y, a_fHeight));
+			AddQuad(points[i], points[i + 1], vector3(points[i].x, points[i].y, a_fHeight), vector3(points [i + 1].x, points[i + 1].y, a_fHeight));
 		}
 		else
 		{
-			AddTri(points[i], points[0], vector3(0, 0, 1));
+			AddTri(vector3(0, 0, 0), points[0], points[i]);
+			AddTri(vector3(points[0].x, points[0].y, a_fHeight), vector3(0, 0, a_fHeight), vector3(points[i].x, points[i].y, a_fHeight));
+			AddQuad(points[i], points[0], vector3(points[i].x, points[i].y, a_fHeight), vector3(points[0].x, points[0].y, a_fHeight));
 		}
 	}
 	CompleteMesh(a_v3Color);
@@ -374,13 +379,41 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 		a_nSubdivisions = 3;
 	if (a_nSubdivisions > 360)
 		a_nSubdivisions = 360;
+	int i;
+	int x = 0;
+	int y = 0;
+	std::vector<vector3> points;
 
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
-	// -------------------------------
+	for (i = 0; i < a_nSubdivisions; i++)
+	{
+
+		double currentX = x + (a_fInnerRadius * cos(i * (2.0f * PI) / a_nSubdivisions));
+		double currentY = y + (a_fInnerRadius * sin(i * (2.0f * PI) / a_nSubdivisions));
+
+		points.push_back(vector3(currentX, currentY, 0));
+
+
+
+	}
+
+	for (i = 0; i < a_nSubdivisions; i++)
+	{
+		if (i < a_nSubdivisions - 1)
+		{
+			AddTri(vector3(0, 0, 0), points[i + 1], points[i]);
+			AddTri(vector3(points[i + 1].x, points[i + 1].y, a_fHeight), vector3(0, 0, a_fHeight), vector3(points[i].x, points[i].y, a_fHeight));
+			AddQuad(points[i], points[i + 1], vector3(points[i].x, points[i].y, a_fHeight), vector3(points[i + 1].x, points[i + 1].y, a_fHeight));
+		}
+		else
+		{
+			AddTri(vector3(0, 0, 0), points[0], points[i]);
+			AddTri(vector3(points[0].x, points[0].y, a_fHeight), vector3(0, 0, a_fHeight), vector3(points[i].x, points[i].y, a_fHeight));
+			AddQuad(points[i], points[0], vector3(points[i].x, points[i].y, a_fHeight), vector3(points[0].x, points[0].y, a_fHeight));
+		}
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
