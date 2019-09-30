@@ -383,6 +383,7 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	int x = 0;
 	int y = 0;
 	std::vector<vector3> points;
+	std::vector<vector3> outerPoints;
 
 	Release();
 	Init();
@@ -395,6 +396,10 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 
 		points.push_back(vector3(currentX, currentY, 0));
 
+		double outerX = x + (a_fOuterRadius * cos(i * (2.0f * PI) / a_nSubdivisions));
+		double outerY = y + (a_fOuterRadius * sin(i * (2.0f * PI) / a_nSubdivisions));
+		
+		outerPoints.push_back(vector3(outerX, outerY, 0));
 
 
 	}
@@ -403,15 +408,18 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	{
 		if (i < a_nSubdivisions - 1)
 		{
-			AddTri(vector3(0, 0, 0), points[i + 1], points[i]);
-			AddTri(vector3(points[i + 1].x, points[i + 1].y, a_fHeight), vector3(0, 0, a_fHeight), vector3(points[i].x, points[i].y, a_fHeight));
-			AddQuad(points[i], points[i + 1], vector3(points[i].x, points[i].y, a_fHeight), vector3(points[i + 1].x, points[i + 1].y, a_fHeight));
+			AddQuad(points[i + 1],points[i],  vector3(points[i + 1].x, points[i + 1].y, a_fHeight),vector3(points[i].x, points[i].y, a_fHeight) );
+			AddQuad(outerPoints[i], outerPoints[i + 1], vector3(outerPoints[i].x, outerPoints[i].y, a_fHeight), vector3(outerPoints[i + 1].x, outerPoints[i + 1].y, a_fHeight));
+			AddQuad(outerPoints[i + 1],outerPoints[i], points[i+1], points[i]);
+			AddQuad(vector3(outerPoints[i].x, outerPoints[i].y, a_fHeight), vector3(outerPoints[i + 1].x, outerPoints[i + 1].y, a_fHeight), vector3(points[i].x, points[i].y, a_fHeight), vector3(points[i + 1].x, points[i + 1].y, a_fHeight));
 		}
 		else
 		{
-			AddTri(vector3(0, 0, 0), points[0], points[i]);
-			AddTri(vector3(points[0].x, points[0].y, a_fHeight), vector3(0, 0, a_fHeight), vector3(points[i].x, points[i].y, a_fHeight));
-			AddQuad(points[i], points[0], vector3(points[i].x, points[i].y, a_fHeight), vector3(points[0].x, points[0].y, a_fHeight));
+			AddQuad(points[0], points[i], vector3(points[0].x, points[0].y, a_fHeight), vector3(points[i].x, points[i].y, a_fHeight));
+			AddQuad(outerPoints[i], outerPoints[0], vector3(outerPoints[i].x, outerPoints[i].y, a_fHeight), vector3(outerPoints[0].x, outerPoints[0].y, a_fHeight));
+			AddQuad(outerPoints[0], outerPoints[i], points[0], points[i]);
+			AddQuad(vector3(outerPoints[i].x, outerPoints[i].y, a_fHeight), vector3(outerPoints[0].x, outerPoints[0].y, a_fHeight), vector3(points[i].x, points[i].y, a_fHeight), vector3(points[0].x, points[0].y, a_fHeight));
+
 		}
 	}
 
