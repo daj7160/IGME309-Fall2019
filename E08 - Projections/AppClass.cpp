@@ -55,7 +55,6 @@ void Application::Display(void)
 	case 2:
 		m_pCamera->ResetCamera();
 		m_pCamera->SetPerspective(false);
-		m_pCamera->SetPositionTargetAndUpward(vector3(10.0, -60.0, 500.0), vector3(0.0, 0.0, 0.0), vector3(0.0, 0.0, 1.0));
 		
 		break;
 	case 3:
@@ -64,16 +63,19 @@ void Application::Display(void)
 		break;
 	case 4:
 		m_pCamera->ResetCamera();
-		m_pCamera->SetPositionTargetAndUpward(vector3(0.0, -5.0, -90.0), vector3(0.0, 0.0, -10.0), vector3(0.0, 0.0, -1.0));
+		m_pCamera->SetPositionTargetAndUpward(vector3(0.0, 0.0, -15.0), vector3(0.0, 0.0, 0.0), vector3(0.0, 1.0, 0.0));
 		break;
 	case 5:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUpward(vector3(0.0, 0.0, -11.0), vector3(0.0, 0.0, 0.0), vector3(0.0, 1.0, 0.0));
 		break;
 	case 6:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUpward(vector3(0.0, 0.0, 1.0), vector3(0.0, 0.0, 0.0), vector3(0.0, 1.0, 0.0));
 		break;
 	case 7:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPositionTargetAndUpward(vector3(0.0, 0.0, 10.0), vector3(0.0, 0.0, 0.0), vector3(0.0, -1.0, 0.0));
 		break;
 	}
 
