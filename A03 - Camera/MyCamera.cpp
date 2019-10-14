@@ -118,6 +118,8 @@ void Simplex::MyCamera::ResetCamera(void)
 	CalculateViewMatrix();
 }
 
+
+
 void Simplex::MyCamera::SetPositionTargetAndUpward(vector3 a_v3Position, vector3 a_v3Target, vector3 a_v3Upward)
 {
 	m_v3Position = a_v3Position;
@@ -158,5 +160,18 @@ void MyCamera::MoveForward(float a_fDistance)
 	m_v3Above += vector3(0.0f, 0.0f, -a_fDistance);
 }
 
-void MyCamera::MoveVertical(float a_fDistance){}//Needs to be defined
-void MyCamera::MoveSideways(float a_fDistance){}//Needs to be defined
+//
+void MyCamera::MoveVertical(float a_fDistance){
+	m_v3Position += vector3(0.0f, -a_fDistance, 0.0);
+	m_v3Target += vector3(0.0f, -a_fDistance, 0.0);
+	m_v3Above += vector3(0.0f, -a_fDistance, 0.0);
+}
+
+//Sideways movement without regard for view vector for now
+void MyCamera::MoveSideways(float a_fDistance)
+{
+	m_v3Position += vector3(-a_fDistance, 0.0, 0.0);
+	m_v3Target += vector3(-a_fDistance, 0.0, 0.0);
+	m_v3Above += vector3(-a_fDistance, 0.0, 0.0);
+
+}

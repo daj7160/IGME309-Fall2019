@@ -369,7 +369,8 @@ void Application::CameraRotation(float a_fSpeed)
 		fAngleX += fDeltaMouse * a_fSpeed;
 	}
 	//Change the Yaw and the Pitch of the camera
-	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
+	m_pCamera->SetTarget(vector3(-10.0f * fAngleY, (-10.0f * fAngleX), 0.0f));
+
 }
 //Keyboard
 void Application::ProcessKeyboard(void)
@@ -386,10 +387,17 @@ void Application::ProcessKeyboard(void)
 	if (fMultiplier)
 		fSpeed *= 5.0f;
 
+	//If W is pressed, go forward, if S  is pressed, go backwards. Does not allow for Simultaneous Opposite Cardinal Directions, W will always override S
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		m_pCamera->MoveForward(fSpeed);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		m_pCamera->MoveForward(-fSpeed);
+
+	//A moves left, D moves right, also doesn't allow for SOCD, so A overrides D. Does allow for W & A, W & D, S&A, or S&D combinations though as they are not opposites.
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		m_pCamera->MoveSideways(fSpeed);
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		m_pCamera->MoveSideways(-fSpeed);
 #pragma endregion
 }
 //Joystick
