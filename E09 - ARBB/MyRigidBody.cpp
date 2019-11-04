@@ -87,6 +87,56 @@ void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix)
 	//your code goes here---------------------
 	m_v3MinG = m_v3MinL;
 	m_v3MaxG = m_v3MaxL;
+
+	vector3 cornerVertices[8];
+	//create cube to check for collisions
+	cornerVertices[0] = vector3(m_v3MinL.x, m_v3MinL.y, m_v3MinL.z);
+	cornerVertices[1] = vector3(m_v3MaxL.x, m_v3MinL.y, m_v3MinL.z);
+	cornerVertices[2] = vector3(m_v3MinL.x, m_v3MaxL.y, m_v3MinL.z);
+	cornerVertices[3] = vector3(m_v3MaxL.x, m_v3MaxL.y, m_v3MinL.z);
+	cornerVertices[4] = vector3(m_v3MinL.x, m_v3MinL.y, m_v3MaxL.z);
+	cornerVertices[5] = vector3(m_v3MaxL.x, m_v3MinL.y, m_v3MaxL.z);
+	cornerVertices[6] = vector3(m_v3MinL.x, m_v3MaxL.y, m_v3MaxL.z);
+	cornerVertices[7] = vector3(m_v3MaxL.x, m_v3MaxL.y, m_v3MaxL.z);
+
+	//puts them in world space by using predefined world matrix
+	for (uint i = 0; i < 8; ++i)
+	{
+		cornerVertices[i] = vector3(m_m4ToWorld * vector4(cornerVertices[i], 1.0f));
+	}
+
+	m_v3MaxG = m_v3MinG = cornerVertices[0];
+
+	//check vertices to see if maxes are different from already determined ones
+	for (uint i = 1; i < 8; ++i)
+	{
+		if (m_v3MaxG.x < cornerVertices[i].x)
+		{
+			m_v3MaxG.x = cornerVertices[i].x;
+		}
+		else if (m_v3MinG.x > cornerVertices[i].x)
+		{
+			m_v3MinG.x = cornerVertices[i].x;
+		}
+
+		if (m_v3MaxG.y < cornerVertices[i].y)
+		{
+			m_v3MaxG.y = cornerVertices[i].y;
+		}
+		else if (m_v3MinG.y > cornerVertices[i].y)
+		{
+			m_v3MinG.y = cornerVertices[i].y;
+		}
+
+		if (m_v3MaxG.z < cornerVertices[i].z)
+		{
+			m_v3MaxG.z = cornerVertices[i].z;
+		}
+		else if (m_v3MinG.z > cornerVertices[i].z)
+		{
+			m_v3MinG.z = cornerVertices[i].z;
+		}
+	}
 	//----------------------------------------
 
 	//we calculate the distance between min and max vectors
